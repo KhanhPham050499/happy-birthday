@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chúc mừng sinh nhật chị! Một món quà nhỏ gửi tặng chị 💜">
+    <title>Happy Birthday 💜</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Particles Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Background Music Element -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="assets/music/background.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="app-container">
+        <!-- PHASE 1: ENVELOPE OPENING -->
+        <section id="envelope-section" class="active">
+            <div class="glass-card envelope-wrapper">
+                <div class="envelope" id="main-envelope">
+                    <div class="envelope-back"></div>
+                    <div class="letter" id="envelope-letter">
+                        <div class="letter-content">
+                            <p class="letter-text-intro">Hôm nay là một ngày rất đặc biệt...</p>
+                        </div>
+                    </div>
+                    <div class="envelope-front"></div>
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-label">
+                        <span>Gửi chị 💜</span>
+                    </div>
+                </div>
+                <div class="prompt-text">Hôm nay em có một món quà nhỏ.</div>
+                <div class="hint-text">Hãy nhấp vào phong bì nhé</div>
+            </div>
+        </section>
+
+        <!-- PHASE 2: GIFT BOX -->
+        <section id="gift-section" class="hidden">
+            <div class="gift-box-wrapper">
+                <div class="gift-box" id="main-gift-box">
+                    <div class="gift-lid">
+                        <div class="lid-ribbon-v"></div>
+                        <div class="lid-ribbon-h"></div>
+                        <div class="gift-bow">
+                            <div class="bow-left"></div>
+                            <div class="bow-right"></div>
+                            <div class="bow-center"></div>
+                        </div>
+                    </div>
+                    <div class="gift-body">
+                        <div class="body-ribbon-v"></div>
+                        <div class="body-ribbon-h"></div>
+                    </div>
+                    <div class="gift-shadow"></div>
+                </div>
+                <div class="prompt-text gift-prompt">Nhấn để mở nhé 🎁</div>
+            </div>
+        </section>
+
+        <!-- PHASE 3: BIRTHDAY CARD -->
+        <section id="card-section" class="hidden">
+            <div class="glass-card birthday-card" id="main-birthday-card">
+                <div class="card-glow"></div>
+                <div class="card-header">
+                    <div class="cake-icon-wrapper">
+                        <!-- Elegant Cake SVG -->
+                        <svg class="cake-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M25 75h50v8H25z" fill="#9D4EDD"/>
+                            <path d="M28 45h44v30H28z" fill="#C77DFF" opacity="0.9"/>
+                            <!-- Frosting drips -->
+                            <path d="M28 45c2 4 4 4 6 0s4-4 6 0 4 4 6 0 4-4 6 0 4 4 6 0 4-4 6 0 4 4 6 0" fill="#F8C8DC"/>
+                            <!-- Candles -->
+                            <path d="M48 25h4v20h-4z" fill="#EBD8FF"/>
+                            <path d="M48 18c0 0-3 3-1 7h6c2-4-1-7-1-7" fill="#F8C8DC"/>
+                            <path d="M36 28h4v17h-4z" fill="#EBD8FF"/>
+                            <path d="M36 21c0 0-3 3-1 7h6c2-4-1-7-1-7" fill="#F8C8DC"/>
+                            <path d="M60 28h4v17h-4z" fill="#EBD8FF"/>
+                            <path d="M60 21c0 0-3 3-1 7h6c2-4-1-7-1-7" fill="#F8C8DC"/>
+                        </svg>
+                    </div>
+                    <h1 class="card-title">Happy Birthday 💜</h1>
+                </div>
+
+                <div class="card-body">
+                    <div class="typing-container" id="wishes-typing-area">
+                        <!-- Wishes paragraphs will be typed here -->
+                    </div>
+                    <div class="wishes-ending" id="ending-icons">
+                        <span>💜</span><span>✨</span><span>🎂</span>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button class="secret-btn" id="secret-trigger">Đừng bấm nha 👀</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHASE 4: SECRET MODAL -->
+        <div id="secret-modal" class="modal-overlay">
+            <div class="glass-card modal-content">
+                <button class="close-modal-btn" id="close-modal">&times;</button>
+                <div class="modal-body">
+                    <h2 class="modal-title">Thật ra...</h2>
+                    <p class="modal-text">Em định chỉ chúc sinh nhật thôi.</p>
+                    <p class="modal-text">Nhưng cũng muốn nói là...</p>
+                    <p class="modal-text font-accent">Được quen chị là một điều khá vui. 💜</p>
+                    <p class="modal-text">Hy vọng sau này sẽ còn có thêm nhiều dịp để em được chúc mừng chị nữa.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Music Control -->
+        <button id="music-toggle-btn" class="music-control" aria-label="Bật/Tắt nhạc">
+            <div class="music-icon-wrapper">
+                <svg class="music-note-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18V5l12-2v13"></path>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <circle cx="18" cy="16" r="3"></circle>
+                </svg>
+            </div>
+            <div class="music-waves">
+                <span></span><span></span><span></span>
+            </div>
+        </button>
+
+        <!-- General Footer -->
+        <footer class="app-footer">
+            <p>Made with 💜 just for you.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
